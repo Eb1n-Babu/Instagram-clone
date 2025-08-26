@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <h1>views</h1>
+    {% for i in user %}
+    <li>{{ i.username }}</li>
+    {% endfor %}
+</div>
+<a href="{% url 'update' %}">reg</a>
+</body>
+</html>

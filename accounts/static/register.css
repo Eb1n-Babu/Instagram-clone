@@ -1,0 +1,101 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #fafafa;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.register-container {
+    max-width: 350px;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    padding: 40px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 450px;
+}
+.register-container img {
+    width: 175px;
+    margin-bottom: 20px;
+}
+.register-container h2 {
+    font-size: 17px;
+    color: #8e8e8e;
+    margin: 0 0 20px;
+    font-weight: normal;
+}
+.register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+}
+.register-form div {
+    margin: 8px 0;
+    width: 100%;
+}
+.register-form input {
+    margin: 8px 0;
+    padding: 10px;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    background-color: #fafafa;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.register-form input:focus {
+    outline: none;
+    border-color: #0095f6;
+    box-shadow: 0 0 3px rgba(0, 149, 246, 0.3);
+}
+.register-form label {
+    display: none;
+}
+.register-form button {
+    background-color: #0095f6;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 15px 0;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+.register-form button:disabled {
+    background-color: #b2dffc;
+    cursor: not-allowed;
+}
+.login-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #8e8e8e;
+}
+.login-link a {
+    color: #00376b;
+    text-decoration: none;
+    font-weight: bold;
+}
+.login-link a:hover {
+    text-decoration: underline;
+}
+.error {
+    color: #ed4956;
+    font-size: 12px;
+    margin: 5px 0;
+    width: 100%;
+    text-align: center;
+}
+.error[style*="display: block"] {
+    display: block !important;
+}
