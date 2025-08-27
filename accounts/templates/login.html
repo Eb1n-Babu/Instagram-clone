@@ -1,16 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div>
-    <h1>views</h1>
-    {% for i in user %}
-    <li>{{ i.username }}</li>
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block header %}
+<h2 class="stylish-header">Log in to continue to InstaClone</h2>
+{% endblock %}
+
+{% block content %}
+<form method="POST" class="auth-form">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group">
+            {{ field }}
+            {% if field.errors %}
+                <div class="error">
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
     {% endfor %}
+
+    {% if form.non_field_errors %}
+        <div class="error">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if messages %}
+        <div class="message-container">
+            {% for message in messages %}
+                <div class="error">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <button type="submit">Log In</button>
+</form>
+{% endblock %}
+
+{% block footer %}
+<div class="auth-footer">
+    Don't have an account? <a href="{% url 'register_view' %}">Sign up</a>
 </div>
-<a href="{% url 'update' %}">reg</a>
-</body>
-</html>
+{% endblock %}

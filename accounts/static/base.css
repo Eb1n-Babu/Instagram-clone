@@ -7,7 +7,8 @@ body {
     align-items: center;
     height: 100vh;
 }
-.register-container {
+
+.auth-container {
     max-width: 350px;
     width: 100%;
     background-color: #ffffff;
@@ -20,47 +21,76 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 450px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
-.register-container img {
+
+.auth-container img {
     width: 175px;
     margin-bottom: 20px;
 }
-.register-container h2 {
+
+.stylish-header {
     font-size: 17px;
     color: #8e8e8e;
     margin: 0 0 20px;
     font-weight: normal;
+    letter-spacing: 0.5px;
+    animation: fadeInLetters 0.8s ease-in-out;
 }
-.register-form {
+
+@keyframes fadeInLetters {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     max-width: 300px;
 }
-.register-form div {
+
+.auth-form .form-group {
     margin: 8px 0;
     width: 100%;
 }
-.register-form input {
+
+.auth-form input {
     margin: 8px 0;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #dbdbdb;
-    border-radius: 3px;
+    border-radius: 6px;
     background-color: #fafafa;
     font-size: 14px;
     width: 100%;
     box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.register-form input:focus {
+
+.auth-form input::placeholder {
+    color: #999;
+    opacity: 1;
+    font-size: 13px;
+}
+
+.auth-form input:focus {
     outline: none;
     border-color: #0095f6;
-    box-shadow: 0 0 3px rgba(0, 149, 246, 0.3);
+    box-shadow: 0 0 4px rgba(0, 149, 246, 0.3);
 }
-.register-form label {
+
+.auth-form label {
     display: none;
 }
-.register-form button {
+
+.auth-form button {
     background-color: #0095f6;
     color: #ffffff;
     border: none;
@@ -72,30 +102,49 @@ body {
     cursor: pointer;
     width: 100%;
 }
-.register-form button:disabled {
+
+.auth-form button:hover {
+    background-color: #0077cc;
+}
+
+.auth-form button:disabled {
     background-color: #b2dffc;
     cursor: not-allowed;
 }
-.login-link {
+
+.auth-footer {
     margin-top: 20px;
     font-size: 14px;
     color: #8e8e8e;
 }
-.login-link a {
+
+.auth-footer a {
     color: #00376b;
     text-decoration: none;
     font-weight: bold;
 }
-.login-link a:hover {
+
+.auth-footer a:hover {
     text-decoration: underline;
 }
-.error {
+
+.form-group .error {
     color: #ed4956;
     font-size: 12px;
-    margin: 5px 0;
-    width: 100%;
-    text-align: center;
+    margin-top: 4px;
+    text-align: left;
+    padding-left: 4px;
 }
-.error[style*="display: block"] {
-    display: block !important;
+
+.error {
+    color: #ed4956;
+    font-size: 13px;
+    margin: 10px 0;
+    padding: 6px 10px;
+    background-color: #fff0f0;
+    border: 1px solid #ed4956;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
 }

@@ -1,46 +1,21 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import  UserCreationForm , AuthenticationForm
 
-class RegisterForm(UserCreationForm):
-    username = forms.CharField(
-        max_length=150,
-        help_text='',  # Hides "150 characters or fewer..." message
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
-    )
-    password1 = forms.CharField(
-        label='Password',
-        help_text='',  # Hides password rule messages
-        widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
-    )
-    password2 = forms.CharField(
-        label='Confirm Password',
-        help_text='',  # Hides "Enter the same password..." message
-        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'})
-    )
-    email = forms.EmailField(
-        required=True,
-        widget=forms.EmailInput(attrs={'placeholder': 'Email'})
-    )
 
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
-
+class RegistrationForm(UserCreationForm):
+    username = forms.CharField(max_length=30, widget=forms.TextInput
+    (attrs={'placeholder':'Username','class':'form-control','autofocus':'on','required':'true','autocomplete':'username'}))
+    password1 = forms.CharField(max_length=30,
+    widget=forms.PasswordInput(attrs={'placeholder':'Password','class':'form-control','autocomplete':'password'}))
+    password2 = forms.CharField(max_length=30,
+    widget=forms.PasswordInput(attrs={'placeholder':'Confirm Password','class':'form-control','autocomplete':'password'}))
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(
-        max_length=150,
-        help_text='',  # Suppresses default help text
-        widget=forms.TextInput(attrs={
-            'placeholder': 'Username',
-            'class': 'form-control'
-        })
-    )
-    password = forms.CharField(
-        help_text='',  # Suppresses default help text
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Password',
-            'class': 'form-control'
-        })
-    )
+    username = forms.CharField(max_length=30,
+    widget=forms.TextInput(attrs={'placeholder':'Username','class':'form-control','autocomplete':'username'}))
+    password = forms.CharField(max_length=30,
+    widget=forms.PasswordInput(attrs={'placeholder':'Password','class':'form-control','autocomplete':'password'}))
+
+    def confirm_login_allowed(self, user):
+        if not user.is_active:
+            raise forms.ValidationError("This user is inactive")
