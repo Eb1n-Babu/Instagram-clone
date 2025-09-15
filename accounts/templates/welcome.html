@@ -1,142 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f6f8;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
+{% load static %}
+{% block title %}Feed{% endblock %}
 
-        h2 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
+{% block content %}
+<!-- Link to CSS -->
+<link rel="stylesheet" href="{% static 'welcome.css' %}">
 
-        form {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        form input[type="text"],
-        form textarea,
-        form input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        form button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        form button:hover {
-            background-color: #2980b9;
-        }
-
-        .feed-post {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .feed-post img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .feed-post p {
-            margin: 5px 0;
-        }
-
-        .feed-post em {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .comments {
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px solid #eee;
-        }
-
-        .comments p {
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .comments form {
-            margin-top: 10px;
-        }
-
-        .comments input[type="text"] {
-            width: calc(100% - 100px);
-            display: inline-block;
-        }
-
-        .comments button {
-            display: inline-block;
-            width: 90px;
-            margin-left: 10px;
-        }
-    </style>
-</head>
-<body>
-
-    <h2>Welcome, {{ user.username }} 👋</h2>
-
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ post_form.as_p }}
-        <button type="submit">Upload Post</button>
-    </form>
-
-    <hr>
-
-    {% for post in posts %}
-        <div class="feed-post">
-            <p><strong>{{ post.user.username }}</strong> posted:</p>
-            <img src="{{ post.image.url }}" alt="Post Image">
-            <p>{{ post.caption }}</p>
-            <p><em>{{ post.created_at }}</em></p>
-
-            <div class="comments">
-                <h4>Comments:</h4>
-                {% for comment in post.comments.all %}
-                    <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
-                {% endfor %}
-
-                <form method="POST" action="{% url 'add_comment' post.id %}">
-                    {% csrf_token %}
-                    <input type="text" name="text" placeholder="Add a comment..." required>
-                    <button type="submit">Comment</button>
-                </form>
+<!-- Modal Form -->
+<div id="postModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h3>Create a Post</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_image" class="file-label">Select Photo
+                    <input type="file" name="image" id="id_image" accept="image/*" required>
+                </label>
+                {% if post_form.image.errors %}
+                    <div class="form-error">{{ post_form.image.errors }}</div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="id_caption">Caption</label>
+                    {{ post_form.caption }}
+                    {% if post_form.caption.errors %}
+                        <div class="form-error">{{ post_form.caption.errors }}</div>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-    {% endfor %}
+            <button type="submit" class="post-btn">Share</button>
+        </form>
+    </div>
+</div>
 
-</body>
-</html>
+<!-- Instagram-style Layout -->
+<div class="main-layout">
+    <!-- Sidebar Profile -->
+    <aside class="sidebar-left">
+        <div class="profile-card">
+            <h2>{{ user.username }}</h2>
+            <a href="{% url 'logout_view' %}" class="logout-link">Log Out</a>
+            <button id="openPostModal" class="new-post-btn">New Post</button>
+        </div>
+    </aside>
+
+    <!-- Feed Section -->
+    <section class="scrollable-feed">
+        {% if messages %}
+            <div class="message-container">
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% for post in posts %}
+            <article class="feed-post">
+                <div class="post-header">
+                    <div class="user-info">
+                        <strong>{{ post.user.username }}</strong>
+                    </div>
+                    <span class="timestamp">{{ post.created_at|timesince }} ago</span>
+                </div>
+                <img src="{{ post.image.url }}" class="post-img" alt="{{ post.caption }}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 614 614%22><rect width=%22614%22 height=%22614%22 fill=%22%23dbdbdb%22/><text x=%2250%%22 y=%2250%%22 font-size=%2214%22 fill=%22%238e8e8e%22 text-anchor=%22middle%22 dy=%22.3em%22>Post Image</text></svg>';">
+                <div class="post-actions">
+                    <button class="action-btn">♥</button>
+                    <button class="action-btn">💬</button>
+                    <button class="action-btn">✈</button>
+                </div>
+                <p class="caption"><strong>{{ post.user.username }}</strong> {{ post.caption }}</p>
+                <div class="comments">
+                    {% for comment in post.comments.all %}
+                        <p><strong>{{ comment.user.username }}</strong> {{ comment.text }}</p>
+                    {% endfor %}
+                    <form method="POST" action="{% url 'add_comment' post.id %}">
+                        {% csrf_token %}
+                        <input type="text" name="text" placeholder="Add a comment..." required>
+                        <button type="submit" class="comment-btn">Post</button>
+                    </form>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+</div>
+
+<!-- Link to JavaScript -->
+<script src="{% static 'welcome.js' %}"></script>
+{% endblock %}
