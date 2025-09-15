@@ -1,10 +1,10 @@
-from django.contrib import messages
 from django.contrib.auth import login , logout
-from django.shortcuts import redirect, render
 from accounts.forms import RegistrationForm, LoginForm
-from django.contrib.auth.decorators import login_required
-from .models import Post
 from .forms import PostForm, CommentForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect ,get_object_or_404
+from django.contrib import messages
+from .models import Post
 
 
 def register_view(request):
@@ -46,7 +46,6 @@ def logout_view(request):
     messages.success(request, "Logout successful")
     return redirect('login_view')
 
-
 @login_required
 def welcome_view(request):
     posts = Post.objects.all().order_by('-created_at')
@@ -63,12 +62,11 @@ def welcome_view(request):
         'user': request.user,
         'posts': posts,
         'post_form': post_form,
-        'title': 'Welcome'
     })
 
 @login_required
 def add_comment(request, post_id):
-    post = Post.objects.get(id=post_id)
+    post = get_object_or_404(Post, id=post_id)
     comment_form = CommentForm(request.POST)
 
     if comment_form.is_valid():
