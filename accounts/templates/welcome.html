@@ -2,17 +2,141 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        form input[type="text"],
+        form textarea,
+        form input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        form button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #2980b9;
+        }
+
+        .feed-post {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .feed-post img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .feed-post p {
+            margin: 5px 0;
+        }
+
+        .feed-post em {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .comments {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .comments p {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .comments form {
+            margin-top: 10px;
+        }
+
+        .comments input[type="text"] {
+            width: calc(100% - 100px);
+            display: inline-block;
+        }
+
+        .comments button {
+            display: inline-block;
+            width: 90px;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>siiikidkodk0o</h1>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div>{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+    <h2>Welcome, {{ user.username }} 👋</h2>
 
-    <a href="{% url 'logout_view' %}">Log in</a>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ post_form.as_p }}
+        <button type="submit">Upload Post</button>
+    </form>
+
+    <hr>
+
+    {% for post in posts %}
+        <div class="feed-post">
+            <p><strong>{{ post.user.username }}</strong> posted:</p>
+            <img src="{{ post.image.url }}" alt="Post Image">
+            <p>{{ post.caption }}</p>
+            <p><em>{{ post.created_at }}</em></p>
+
+            <div class="comments">
+                <h4>Comments:</h4>
+                {% for comment in post.comments.all %}
+                    <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
+                {% endfor %}
+
+                <form method="POST" action="{% url 'add_comment' post.id %}">
+                    {% csrf_token %}
+                    <input type="text" name="text" placeholder="Add a comment..." required>
+                    <button type="submit">Comment</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+
 </body>
 </html>
