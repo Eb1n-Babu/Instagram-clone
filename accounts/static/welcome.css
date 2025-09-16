@@ -18,7 +18,7 @@ body {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    padding-top: 80px; /* Adjust for assumed 60px fixed header */
+    padding-top: 80px;
 }
 
 /* Sidebar Profile */
@@ -148,8 +148,16 @@ body {
     cursor: pointer;
 }
 
+.action-btn.liked {
+    color: #ed4956;
+}
+
 .action-btn:hover {
     color: #8e8e8e;
+}
+
+.action-btn.liked:hover {
+    color: #c1353e;
 }
 
 .caption {
@@ -162,30 +170,90 @@ body {
     font-weight: 600;
 }
 
-/* Comments */
-.comments {
+/* Comments Section - Instagram Style */
+.comments-section {
     padding: 8px 16px;
     border-top: 1px solid #dbdbdb;
 }
 
-.comments p {
+.view-comments {
+    margin-bottom: 8px;
+}
+
+.view-all-comments {
+    background: none;
+    border: none;
+    color: #8e8e8e;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.view-all-comments:hover {
+    color: #262626;
+}
+
+.comment-thread {
+    margin-bottom: 16px;
+}
+
+.comment {
+    margin-bottom: 4px;
+}
+
+.reply {
+    margin-left: 40px;
+    margin-bottom: 4px;
+    padding: 4px 0;
+    border-top: 1px solid #efefef;
+}
+
+.comments-section p {
     font-size: 14px;
     color: #262626;
     margin: 4px 0;
 }
 
-.comments p strong {
+.comments-section p strong {
     font-weight: 600;
 }
 
-.comments form {
+.reply-btn {
+    background: none;
+    border: none;
+    color: #0095f6;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.reply-btn:hover {
+    color: #00376b;
+}
+
+.reply-form-container {
+    margin-left: 40px;
+    margin-top: 4px;
+}
+
+.replies-container {
+    margin-left: 40px;
+}
+
+.main-comment-form {
+    padding: 8px 0;
+    border-top: 1px solid #efefef;
+}
+
+.main-comment-form form {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: 8px;
 }
 
-.comments input[type="text"] {
+.main-comment-form input[type="text"] {
     flex: 1;
     border: none;
     background: #fafafa;
@@ -195,20 +263,42 @@ body {
     color: #262626;
 }
 
-.comments input[type="text"]::placeholder {
+.main-comment-form input[type="text"]::placeholder {
     color: #8e8e8e;
 }
 
-.comments button {
+.reply-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fafafa;
+    border-radius: 20px;
+    padding: 8px 12px;
+}
+
+.reply-form input[type="text"] {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: #262626;
+}
+
+.reply-form input[type="text"]::placeholder {
+    color: #8e8e8e;
+}
+
+.comment-btn {
     background: none;
     border: none;
     color: #0095f6;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
+    padding: 0;
 }
 
-.comments button:hover {
+.comment-btn:hover {
     color: #00376b;
 }
 
@@ -262,10 +352,10 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #0095f6; /* Instagram blue */
+    background-color: #0095f6;
     color: #fff;
     border: none;
-    border-radius: 12px; /* Rounded corners */
+    border-radius: 12px;
     padding: 12px 24px;
     cursor: pointer;
     font-size: 14px;
@@ -276,12 +366,12 @@ body {
 }
 
 .file-label:hover {
-    background-color: #0074cc; /* Darker blue on hover */
-    transform: scale(1.02); /* Subtle scale effect */
+    background-color: #0074cc;
+    transform: scale(1.02);
 }
 
 .file-label:active {
-    transform: scale(0.98); /* Subtle press effect */
+    transform: scale(0.98);
 }
 
 .file-label input[type="file"] {
