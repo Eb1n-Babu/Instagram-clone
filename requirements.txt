@@ -1,0 +1,4 @@
+Django~=4.2.7
+SQLAlchemy~=2.0.41
+python-decouple~=3.8
+pillow~=11.2.1
