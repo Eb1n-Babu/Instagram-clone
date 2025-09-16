@@ -1,6 +1,7 @@
+from django.contrib.auth.forms import  UserCreationForm , AuthenticationForm
 from django import forms
 from .models import Post, Comment
-from django.contrib.auth.forms import  UserCreationForm , AuthenticationForm
+
 
 
 class RegistrationForm(UserCreationForm):
@@ -21,14 +22,18 @@ class LoginForm(AuthenticationForm):
         if not user.is_active:
             raise forms.ValidationError("This user is inactive")
 
-
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['image', 'caption']
+        widgets = {
+            'caption': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Write a caption...'}),
+        }
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['text']
-
+        widgets = {
+            'text': forms.TextInput(attrs={'placeholder': 'Add a comment...'}),
+        }
