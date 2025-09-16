@@ -52,30 +52,64 @@
                 {% endfor %}
             </div>
         {% endif %}
-        {% for post in posts %}
-            <article class="feed-post">
+        {% for post_data in posts_with_comments %}
+            <article class="feed-post" data-post-id="{{ post_data.post.id }}">
                 <div class="post-header">
                     <div class="user-info">
-                        <strong>{{ post.user.username }}</strong>
+                        <strong>{{ post_data.post.user.username }}</strong>
                     </div>
-                    <span class="timestamp">{{ post.created_at|timesince }} ago</span>
+                    <span class="timestamp">{{ post_data.post.created_at|timesince }} ago</span>
                 </div>
-                <img src="{{ post.image.url }}" class="post-img" alt="{{ post.caption }}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 614 614%22><rect width=%22614%22 height=%22614%22 fill=%22%23dbdbdb%22/><text x=%2250%%22 y=%2250%%22 font-size=%2214%22 fill=%22%238e8e8e%22 text-anchor=%22middle%22 dy=%22.3em%22>Post Image</text></svg>';">
+                <img src="{{ post_data.post.image.url }}" class="post-img" alt="Post {{ post_data.post.id }}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 614 614%22><rect width=%62614%22 height=%62614%22 fill=%22%23dbdbdb%22/><text x=%2250%%22 y=%2250%%22 font-size=%2214%22 fill=%22%238e8e8e%22 text-anchor=%22middle%22 dy=%22.3em%22>Post Image</text></svg>';">
                 <div class="post-actions">
-                    <button class="action-btn">♥</button>
-                    <button class="action-btn">💬</button>
+                    <button class="action-btn like-btn" data-post-id="{{ post_data.post.id }}" data-liked="false">♥</button>
+                    <button class="action-btn comment-btn" data-post-id="{{ post_data.post.id }}">💬</button>
                     <button class="action-btn">✈</button>
                 </div>
-                <p class="caption"><strong>{{ post.user.username }}</strong> {{ post.caption }}</p>
-                <div class="comments">
-                    {% for comment in post.comments.all %}
-                        <p><strong>{{ comment.user.username }}</strong> {{ comment.text }}</p>
-                    {% endfor %}
-                    <form method="POST" action="{% url 'add_comment' post.id %}">
-                        {% csrf_token %}
-                        <input type="text" name="text" placeholder="Add a comment..." required>
-                        <button type="submit" class="comment-btn">Post</button>
-                    </form>
+                <p class="caption"><strong>{{ post_data.post.user.username }}</strong> {{ post_data.post.caption }}</p>
+                <div class="comments-section" data-post-id="{{ post_data.post.id }}">
+                    <!-- Comment count and load more -->
+                    {% if post_data.total_comments > 2 %}
+                        <div class="view-comments">
+                            <button class="view-all-comments" data-post-id="{{ post_data.post.id }}">View all {{ post_data.total_comments }} comments</button>
+                        </div>
+                    {% endif %}
+                    <!-- Top-level comments -->
+                    <div class="comments-container" data-post-id="{{ post_data.post.id }}">
+                        {% for comment in post_data.top_level_comments %}
+                            <div class="comment-thread" data-comment-id="{{ comment.id }}" {% if forloop.counter0 >= 2 %}style="display: none;"{% endif %}>
+                                <div class="comment" data-comment-id="{{ comment.id }}">
+                                    <p><strong>{{ comment.user.username }}</strong> {{ comment.text }}</p>
+                                    <button class="reply-btn" data-comment-id="{{ comment.id }}">Reply</button>
+                                    <div class="reply-form-container" style="display: none;">
+                                        <form method="POST" action="{% url 'add_comment' post_data.post.id %}" class="reply-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                            <input type="text" name="text" placeholder="Reply to {{ comment.user.username }}..." required>
+                                            <button type="submit" class="comment-btn">Post</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Nested replies -->
+                                <div class="replies-container">
+                                    {% for reply in comment.replies.all %}
+                                        <div class="reply" data-reply-id="{{ reply.id }}">
+                                            <p><strong>{{ reply.user.username }}</strong> {{ reply.text }}</p>
+                                            <button class="reply-btn" data-comment-id="{{ comment.id }}">Reply</button>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Main comment form -->
+                    <div class="main-comment-form">
+                        <form method="POST" action="{% url 'add_comment' post_data.post.id %}">
+                            {% csrf_token %}
+                            <input type="text" name="text" placeholder="Add a comment..." required>
+                            <button type="submit" class="comment-btn">Post</button>
+                        </form>
+                    </div>
                 </div>
             </article>
         {% endfor %}
